@@ -1,0 +1,14 @@
+#Script for Jenkins Dynamic Choice Parameter Plugin, list all git branches without the security woes
+
+proc1 = ['/bin/bash', '-c', "/usr/bin/git ls-remote  --refs --heads --tags  http://URL.git"].execute()
+proc2 = ['/bin/bash', '-c', "awk '{print \$2}'"].execute()
+
+
+all = proc1 | proc2 
+String result = all.text
+
+String filename = "/tmp/branches.txt"
+boolean success = new File(filename).write(result) 
+
+def multiline = "cat /tmp/branches.txt".execute().text
+def list = multiline.readLines()
